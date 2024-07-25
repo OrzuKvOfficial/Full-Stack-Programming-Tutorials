@@ -55,3 +55,19 @@ print("O'sish tartibida:", sorted_numbers)
 # Listdagi elementlarni kamayish tartibida joylashtirish
 sorted_numbers_desc = sorted(numbers, reverse=True)
 print("Kamayish tartibida:", sorted_numbers_desc)
+
+
+from googletrans import Translator
+
+# Tarjimon ob'ektini yaratish
+translator = Translator()
+
+# Tarjima qilinadigan matn
+text = "Hello, how are you?"
+
+# Tarjima qilish
+translated = translator.translate(text, src='en', dest='uz')
+
+print(f"Asl matn: {text}")
+print(f"O'zbek tiliga tarjima: {translated.text}")
+
