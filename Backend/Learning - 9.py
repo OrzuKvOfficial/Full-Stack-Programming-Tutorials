@@ -1,45 +1,27 @@
-def add(x, y):
-    return x + y
+def matris_kopaytirish(A, B):
+    result = [[0 for _ in range(len(B[0]))] for _ in range(len(A))]
+    
+    for i in range(len(A)):
+        for j in range(len(B[0])):
+            for k in range(len(B)):
+                result[i][j] += A[i][k] * B[k][j]
+    
+    return result
 
-def subtract(x, y):
-    return x - y
+# Misol uchun
+A = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9]
+]
 
-def multiply(x, y):
-    return x * y
+B = [
+    [9, 8, 7],
+    [6, 5, 4],
+    [3, 2, 1]
+]
 
-def divide(x, y):
-    if y == 0:
-        return "Bo'lish amali nolga bo'linmaydi"
-    return x / y
-
-def calculator():
-    print("Kalkulyator dasturiga xush kelibsiz!")
-    print("Quyidagi amallarni bajara olasiz:")
-    print("1. Qo'shish")
-    print("2. Ayirish")
-    print("3. Ko'paytirish")
-    print("4. Bo'lish")
-
-    while True:
-        choice = input("Amalni tanlang (1/2/3/4) yoki dasturdan chiqish uchun 'q' tugmasini bosing: ")
-
-        if choice == 'q':
-            print("Dasturdan chiqmoqda...")
-            break
-
-        if choice in ['1', '2', '3', '4']:
-            num1 = float(input("Birinchi sonni kiriting: "))
-            num2 = float(input("Ikkinchi sonni kiriting: "))
-
-            if choice == '1':
-                print(f"Natija: {num1} + {num2} = {add(num1, num2)}")
-            elif choice == '2':
-                print(f"Natija: {num1} - {num2} = {subtract(num1, num2)}")
-            elif choice == '3':
-                print(f"Natija: {num1} * {num2} = {multiply(num1, num2)}")
-            elif choice == '4':
-                print(f"Natija: {num1} / {num2} = {divide(num1, num2)}")
-        else:
-            print("Noto'g'ri tanlov, qaytadan urinib ko'ring.")
-
-calculator()
+result = matris_kopaytirish(A, B)
+print("Matritsa ko'paytmasi natijasi:")
+for row in result:
+    print(row)
