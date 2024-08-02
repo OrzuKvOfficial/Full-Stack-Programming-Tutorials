@@ -1,97 +1,28 @@
-import math
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import SVC
+from sklearn.metrics import accuracy_score
+from sklearn.datasets import load_iris
 
-def add(x, y):
-    return x + y
+# 1. Ma'lumotlarni yuklash
+data = load_iris()
+X = data.data
+y = data.target
 
-def subtract(x, y):
-    return x - y
+# 2. Ma'lumotlarni taqsimlash (train/test)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
-def multiply(x, y):
-    return x * y
+# 3. Ma'lumotlarni standartlashtirish
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
 
-def divide(x, y):
-    if y == 0:
-        return "Error! Division by zero."
-    else:
-        return x / y
+# 4. Modelni yaratish va o'rgatish
+model = SVC(kernel='linear')
+model.fit(X_train, y_train)
 
-def power(x, y):
-    return math.pow(x, y)
-
-def sqrt(x):
-    return math.sqrt(x)
-
-def sin(x):
-    return math.sin(math.radians(x))
-
-def cos(x):
-    return math.cos(math.radians(x))
-
-def tan(x):
-    return math.tan(math.radians(x))
-
-def log(x, base=10):
-    return math.log(x, base)
-
-def calculator():
-    print("Select operation:")
-    print("1. Add")
-    print("2. Subtract")
-    print("3. Multiply")
-    print("4. Divide")
-    print("5. Power")
-    print("6. Square Root")
-    print("7. Sin")
-    print("8. Cos")
-    print("9. Tan")
-    print("10. Log")
-
-    while True:
-        choice = input("Enter choice (1/2/3/4/5/6/7/8/9/10): ")
-
-        if choice in ('1', '2', '3', '4', '5'):
-            num1 = float(input("Enter first number: "))
-            num2 = float(input("Enter second number: "))
-
-            if choice == '1':
-                print(f"{num1} + {num2} = {add(num1, num2)}")
-
-            elif choice == '2':
-                print(f"{num1} - {num2} = {subtract(num1, num2)}")
-
-            elif choice == '3':
-                print(f"{num1} * {num2} = {multiply(num1, num2)}")
-
-            elif choice == '4':
-                print(f"{num1} / {num2} = {divide(num1, num2)}")
-
-            elif choice == '5':
-                print(f"{num1} ^ {num2} = {power(num1, num2)}")
-
-        elif choice == '6':
-            num = float(input("Enter number: "))
-            print(f"Square Root of {num} = {sqrt(num)}")
-
-        elif choice == '7':
-            angle = float(input("Enter angle in degrees: "))
-            print(f"Sin({angle}) = {sin(angle)}")
-
-        elif choice == '8':
-            angle = float(input("Enter angle in degrees: "))
-            print(f"Cos({angle}) = {cos(angle)}")
-
-        elif choice == '9':
-            angle = float(input("Enter angle in degrees: "))
-            print(f"Tan({angle}) = {tan(angle)}")
-
-        elif choice == '10':
-            num = float(input("Enter number: "))
-            base = float(input("Enter log base (default is 10): ") or 10)
-            print(f"Log base {base} of {num} = {log(num, base)}")
-
-        next_calculation = input("Do you want to perform another calculation? (yes/no): ")
-        if next_calculation.lower() != 'yes':
-            break
-
-if __name__ == "__main__":
-    calculator()
+# 5. Modelni sinovdan o'tkazish
+y_pred = model.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Modelning aniqligi: {accuracy * 100:.2f}%")
