@@ -1,28 +1,34 @@
-import numpy as np
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.svm import SVC
-from sklearn.metrics import accuracy_score
-from sklearn.datasets import load_iris
+import cv2
 
-# 1. Ma'lumotlarni yuklash
-data = load_iris()
-X = data.data
-y = data.target
+# Haar Cascade classifier for face detection
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
-# 2. Ma'lumotlarni taqsimlash (train/test)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+# Open a connection to the camera (0 is the default camera)
+cap = cv2.VideoCapture(0)
 
-# 3. Ma'lumotlarni standartlashtirish
-scaler = StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_test = scaler.transform(X_test)
+while True:
+    # Read a frame from the camera
+    ret, frame = cap.read()
+    if not ret:
+        break
 
-# 4. Modelni yaratish va o'rgatish
-model = SVC(kernel='linear')
-model.fit(X_train, y_train)
+    # Convert the frame to grayscale (Haar Cascade works with grayscale images)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-# 5. Modelni sinovdan o'tkazish
-y_pred = model.predict(X_test)
-accuracy = accuracy_score(y_test, y_pred)
-print(f"Modelning aniqligi: {accuracy * 100:.2f}%")
+    # Detect faces in the frame
+    faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+
+    # Draw rectangles around the faces
+    for (x, y, w, h) in faces:
+        cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
+
+    # Display the frame with detections
+    cv2.imshow('Camera', frame)
+
+    # Break the loop if the user presses 'q'
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+# Release the camera and close all OpenCV windows
+cap.release()
+cv2.destroyAllWindows()
