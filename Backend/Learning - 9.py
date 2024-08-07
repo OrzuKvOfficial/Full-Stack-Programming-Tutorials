@@ -1,34 +1,23 @@
-import cv2
+import socket
 
-# Haar Cascade classifier for face detection
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+# Server sozlamalari
+HOST = '127.0.0.1'  # Mahalliy host
+PORT = 65432        # Ochiq port, siz istalgan raqamni tanlashingiz mumkin
 
-# Open a connection to the camera (0 is the default camera)
-cap = cv2.VideoCapture(0)
+# Socket yaratish
+with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    s.bind((HOST, PORT))  # Serverni host va portga bog'lash
+    s.listen()            # Keladigan ulanishlarni tinglash
 
-while True:
-    # Read a frame from the camera
-    ret, frame = cap.read()
-    if not ret:
-        break
+    print(f'Server {HOST}:{PORT} da ishlamoqda...')
 
-    # Convert the frame to grayscale (Haar Cascade works with grayscale images)
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-    # Detect faces in the frame
-    faces = face_cascade.detectMultiScale(gray, 1.1, 4)
-
-    # Draw rectangles around the faces
-    for (x, y, w, h) in faces:
-        cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
-
-    # Display the frame with detections
-    cv2.imshow('Camera', frame)
-
-    # Break the loop if the user presses 'q'
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-# Release the camera and close all OpenCV windows
-cap.release()
-cv2.destroyAllWindows()
+    # Ulanuvchini qabul qilish
+    conn, addr = s.accept()  # Yangi ulanishni qabul qilish
+    with conn:
+        print('Ulanish qabul qilindi:', addr)
+        while True:
+            data = conn.recv(1024)  # Mijozdan ma'lumot qabul qilish
+            if not data:
+                break
+            print('Qabul qilindi:', data.decode())  # Qabul qilingan ma'lumotni chiqarish
+            conn.sendall(data)  # Mijozga qaytarish (echo)
