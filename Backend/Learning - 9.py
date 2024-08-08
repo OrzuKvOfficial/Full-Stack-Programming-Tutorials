@@ -1,23 +1,13 @@
 import socket
 
-# Server sozlamalari
-HOST = '127.0.0.1'  # Mahalliy host
-PORT = 65432        # Ochiq port, siz istalgan raqamni tanlashingiz mumkin
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_socket.bind(("localhost", 12345))
+server_socket.listen()
 
-# Socket yaratish
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.bind((HOST, PORT))  # Serverni host va portga bog'lash
-    s.listen()            # Keladigan ulanishlarni tinglash
+conn, addr = server_socket.accept()
+print(f"Connected by {addr}")
 
-    print(f'Server {HOST}:{PORT} da ishlamoqda...')
+data = conn.recv(1024)
+print("Received", repr(data))
 
-    # Ulanuvchini qabul qilish
-    conn, addr = s.accept()  # Yangi ulanishni qabul qilish
-    with conn:
-        print('Ulanish qabul qilindi:', addr)
-        while True:
-            data = conn.recv(1024)  # Mijozdan ma'lumot qabul qilish
-            if not data:
-                break
-            print('Qabul qilindi:', data.decode())  # Qabul qilingan ma'lumotni chiqarish
-            conn.sendall(data)  # Mijozga qaytarish (echo)
+conn.close()
