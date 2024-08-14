@@ -1,31 +1,13 @@
-import smtplib
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
+from googletrans import Translator
 
-# Email ma'lumotlari
-sender_email = "your_email@gmail.com"
-receiver_email = "receiver_email@example.com"
-password = "your_password"
+# Tarjimon ob'ektini yaratamiz
+translator = Translator()
 
-# Email xabari tayyorlash
-message = MIMEMultipart()
-message['From'] = sender_email
-message['To'] = receiver_email
-message['Subject'] = "Email Subject"
+# Tarjima qilmoqchi bo'lgan matningiz
+text = "Hello, how are you?"
 
-# Email mazmuni
-body = "Bu emailning mazmuni."
-message.attach(MIMEText(body, 'plain'))
+# Ingliz tilidan ispan tiliga tarjima qilish
+translated = translator.translate(text, src='en', dest='es')
 
-# SMTP serverga ulanish va email yuborish
-try:
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.starttls()  # TLS (Transport Layer Security) ni yoqish
-    server.login(sender_email, password)
-    text = message.as_string()
-    server.sendmail(sender_email, receiver_email, text)
-    print("Email muvaffaqiyatli yuborildi.")
-except Exception as e:
-    print(f"Xato yuz berdi: {e}")
-finally:
-    server.quit()
+# Tarjimalangan matnni chop etish
+print(translated.text)
