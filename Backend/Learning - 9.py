@@ -1,13 +1,11 @@
-from googletrans import Translator
+import requests
 
-# Tarjimon ob'ektini yaratamiz
-translator = Translator()
+# Telegram bot token va chat ID ni kiritish
+token = 'YOUR_TELEGRAM_BOT_TOKEN'
+chat_id = 'YOUR_CHAT_ID'
+text = 'Salom, bu Telegram orqali yuborilgan xabar!'
 
-# Tarjima qilmoqchi bo'lgan matningiz
-text = "Hello, how are you?"
-
-# Ingliz tilidan ispan tiliga tarjima qilish
-translated = translator.translate(text, src='en', dest='es')
-
-# Tarjimalangan matnni chop etish
-print(translated.text)
+# Telegram API orqali xabar yuborish
+url = f'https://api.telegram.org/bot{token}/sendMessage'
+params = {'chat_id': chat_id, 'text': text}
+requests.get(url, params=params)
