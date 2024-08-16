@@ -1,11 +1,22 @@
-import requests
+import cv2
 
-# Telegram bot token va chat ID ni kiritish
-token = 'YOUR_TELEGRAM_BOT_TOKEN'
-chat_id = 'YOUR_CHAT_ID'
-text = 'Salom, bu Telegram orqali yuborilgan xabar!'
+# Kamerani ulash
+cap = cv2.VideoCapture(0)
 
-# Telegram API orqali xabar yuborish
-url = f'https://api.telegram.org/bot{token}/sendMessage'
-params = {'chat_id': chat_id, 'text': text}
-requests.get(url, params=params)
+while True:
+    # Video oqimidan ramkalarni o'qing
+    ret, frame = cap.read()
+    
+    if not ret:
+        break
+    
+    # Tasvirni ko'rsatish
+    cv2.imshow('Kamera', frame)
+    
+    # Agar 'q' tugmasi bosilsa, chiqish
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+
+# Kamerani yopish va barcha oynalarni o'chirish
+cap.release()
+cv2.destroyAllWindows()
