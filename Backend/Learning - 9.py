@@ -1,8 +1,13 @@
-import psutil
+from googletrans import Translator
 
-def check_connected_devices():
-    devices = psutil.disk_partitions()
-    for device in devices:
-        print(f"Device: {device.device}, Mountpoint: {device.mountpoint}")
+# Initialize the translator
+translator = Translator()
 
-check_connected_devices()
+# Original text in Uzbek
+text = "yashash faqat Ruscha Englishcha"
+
+# Translate to English
+translated_text = translator.translate(text, src='uz', dest='en')
+
+# Print the translation
+print(translated_text.text)
