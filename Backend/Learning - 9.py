@@ -1,19 +1,11 @@
-import cv2
+import usb.core
+import usb.util
 
-# Kamerani ochish (0 - bu kompyuterdagi birinchi kamera)
-cap = cv2.VideoCapture(0)
+# Barcha USB qurilmalarni aniqlash
+devices = usb.core.find(find_all=True)
 
-while True:
-    # Kameradan tasvirni o'qish
-    ret, frame = cap.read()
-
-    # Tasvirni oynada ko'rsatish
-    cv2.imshow('Camera', frame)
-
-    # 'q' tugmasini bosish orqali dasturdan chiqish
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-# Kamerani yopish va barcha oynalarni yo'q qilish
-cap.release()
-cv2.destroyAllWindows()
+# Qurilmalarni ro'yxatlash
+for device in devices:
+    print(f"ID: {device.idVendor}:{device.idProduct}")
+    print(f"Manufacturer: {usb.util.get_string(device, device.iManufacturer)}")
+    print(f"Product: {usb.util.get_string(device, device.iProduct)}\n")
