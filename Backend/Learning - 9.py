@@ -1,11 +1,23 @@
-import usb.core
-import usb.util
+import re
 
-# Barcha USB qurilmalarni aniqlash
-devices = usb.core.find(find_all=True)
+def filter_code_blocks(text):
+    # Kod bloklarini qidiradigan regex
+    code_block_pattern = r"```(.*?)```|'''(.*?)'''|\"\"\"(.*?)\"\"\""
+    
+    # Matndan kod bloklarini ajratib olish
+    code_blocks = re.findall(code_block_pattern, text, re.DOTALL)
 
-# Qurilmalarni ro'yxatlash
-for device in devices:
-    print(f"ID: {device.idVendor}:{device.idProduct}")
-    print(f"Manufacturer: {usb.util.get_string(device, device.iManufacturer)}")
-    print(f"Product: {usb.util.get_string(device, device.iProduct)}\n")
+    # Har bir topilgan kod blokini qayta ishlash yoki filtrlash (bu yerda shunchaki ularni yig'amiz)
+    filtered_code = []
+    for block in code_blocks:
+        # 'block' turli uslubdagi uchli qo'shtirnoqlar orasidagi kod blokini oladi
+        filtered_code.append(block[0] or block[1] or block[2])
+    
+    return filtered_code
+
+# Matn
+text = """
+This is some text.
+
+```python
+print('Hello, World!')
