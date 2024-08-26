@@ -1,18 +1,12 @@
-from chatterbot import ChatBot
-from chatterbot.trainers import ChatterBotCorpusTrainer
+from PIL import Image, ImageEnhance
 
-# Chatbot yaratish
-bot = ChatBot('GapiruvchiRobot')
+# Tasvirni ochish
+image = Image.open("rasm.png")
 
-# Chatbotni o'rgatish
-trainer = ChatterBotCorpusTrainer(bot)
-trainer.train("chatterbot.corpus.english")
+# Rangni oshirish yoki kamaytirish (1.0 normal, 0.0 rang yo'q, 2.0 rang ikki barobar kuchli)
+enhancer = ImageEnhance.Color(image)
+image_enhanced = enhancer.enhance(1.5)
 
-# Chatbot bilan muloqot qilish
-while True:
-    try:
-        user_input = input("Siz: ")
-        response = bot.get_response(user_input)
-        print(f"Robot: {response}")
-    except(KeyboardInterrupt, EOFError, SystemExit):
-        break
+# Natijani saqlash
+image_enhanced.save("rasm_enhanced.png")
+image_enhanced.show()
