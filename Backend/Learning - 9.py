@@ -1,15 +1,10 @@
-# simple_calculator.py
+from flask import Flask
 
-def add(a, b):
-    return a + b
+app = Flask(__name__)
 
-def subtract(a, b):
-    return a - b
+@app.route('/')
+def home():
+    return "Salom, Flask bilan yaratildi!"
 
-def multiply(a, b):
-    return a * b
-
-def divide(a, b):
-    if b == 0:
-        raise ValueError("Cannot divide by zero")
-    return a / b
+if __name__ == '__main__':
+    app.run(debug=True)
