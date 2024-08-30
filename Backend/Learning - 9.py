@@ -1,10 +1,13 @@
-from flask import Flask
+import requests
 
-app = Flask(__name__)
+# Ma'lumotlar olish uchun URL manzilini kiriting
+url = 'https://jsonplaceholder.typicode.com/posts/1'
 
-@app.route('/')
-def home():
-    return "Salom, Flask bilan yaratildi!"
+# GET so'rovini yuborish
+response = requests.get(url)
 
-if __name__ == '__main__':
-    app.run(debug=True)
+# Javobni JSON formatida qabul qilish
+data = response.json()
+
+# Olingan ma'lumotni ko'rsatish
+print(data)
