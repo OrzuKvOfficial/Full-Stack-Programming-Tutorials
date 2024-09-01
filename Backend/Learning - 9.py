@@ -1,13 +1,20 @@
-import requests
+class PaymentProcessor:
+    def __init__(self, balance):
+        self.balance = balance
 
-# Ma'lumotlar olish uchun URL manzilini kiriting
-url = 'https://jsonplaceholder.typicode.com/posts/1'
+    def make_payment(self, amount):
+        if amount <= self.balance:
+            self.balance -= amount
+            print(f"To'lov muvaffaqiyatli amalga oshirildi. Qolgan balans: {self.balance} so'm.")
+        else:
+            print("Balansingiz yetarli emas!")
 
-# GET so'rovini yuborish
-response = requests.get(url)
+# Foydalanuvchi balansi
+my_balance = 100000  # 100 000 so'm
 
-# Javobni JSON formatida qabul qilish
-data = response.json()
+# To'lov miqdori
+payment_amount = 25000  # 25 000 so'm
 
-# Olingan ma'lumotni ko'rsatish
-print(data)
+# To'lov jarayoni
+processor = PaymentProcessor(my_balance)
+processor.make_payment(payment_amount)
