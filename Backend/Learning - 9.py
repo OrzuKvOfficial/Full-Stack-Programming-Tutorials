@@ -1,20 +1,25 @@
-class PaymentProcessor:
-    def __init__(self, balance):
-        self.balance = balance
+import openai
 
-    def make_payment(self, amount):
-        if amount <= self.balance:
-            self.balance -= amount
-            print(f"To'lov muvaffaqiyatli amalga oshirildi. Qolgan balans: {self.balance} so'm.")
-        else:
-            print("Balansingiz yetarli emas!")
+# OpenAI API kalitingizni kiriting
+openai.api_key = "YOUR_API_KEY"
 
-# Foydalanuvchi balansi
-my_balance = 100000  # 100 000 so'm
+def ai_yordamchi(user_input):
+    response = openai.Completion.create(
+        engine="text-davinci-003",  # Yoki boshqa mavjud model nomini kiriting
+        prompt=user_input,
+        max_tokens=150,
+        n=1,
+        stop=None,
+        temperature=0.7,
+    )
 
-# To'lov miqdori
-payment_amount = 25000  # 25 000 so'm
+    return response.choices[0].text.strip()
 
-# To'lov jarayoni
-processor = PaymentProcessor(my_balance)
-processor.make_payment(payment_amount)
+while True:
+    user_input = input("Sizning savolingiz: ")
+    if user_input.lower() in ["chiqish", "exit", "quit"]:
+        print("Yordamchi dasturdan chiqish...")
+        break
+    
+    response = ai_yordamchi(user_input)
+    print("Yordamchi: ", response)
