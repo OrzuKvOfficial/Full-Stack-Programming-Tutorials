@@ -1,25 +1,17 @@
-import openai
+import sounddevice as sd
+from scipy.io.wavfile import write
 
-# OpenAI API kalitingizni kiriting
-openai.api_key = "YOUR_API_KEY"
+# Parametrlar
+sample_rate = 44100  # Ovoz namuna olish chastotasi (Hz)
+duration = 10  # Yozib olish davomiyligi (soniya)
 
-def ai_yordamchi(user_input):
-    response = openai.Completion.create(
-        engine="text-davinci-003",  # Yoki boshqa mavjud model nomini kiriting
-        prompt=user_input,
-        max_tokens=150,
-        n=1,
-        stop=None,
-        temperature=0.7,
-    )
+print("Ovoz yozib olinmoqda...")
 
-    return response.choices[0].text.strip()
+# Ovoz yozib olish
+recording = sd.rec(int(sample_rate * duration), samplerate=sample_rate, channels=2)
+sd.wait()  # Yozib olish tugaguncha kutish
 
-while True:
-    user_input = input("Sizning savolingiz: ")
-    if user_input.lower() in ["chiqish", "exit", "quit"]:
-        print("Yordamchi dasturdan chiqish...")
-        break
-    
-    response = ai_yordamchi(user_input)
-    print("Yordamchi: ", response)
+# Faylga saqlash
+write("output.wav", sample_rate, recording)
+
+print("Ovoz muvaffaqiyatli yozib olindi va 'output.wav' fayliga saqlandi.")
