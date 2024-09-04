@@ -1,17 +1,22 @@
-import sounddevice as sd
-from scipy.io.wavfile import write
+import RPi.GPIO as GPIO
+import time
 
-# Parametrlar
-sample_rate = 44100  # Ovoz namuna olish chastotasi (Hz)
-duration = 10  # Yozib olish davomiyligi (soniya)
+# GPIO pinlarni sozlash
+PIR_PIN = 7
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(PIR_PIN, GPIO.IN)
 
-print("Ovoz yozib olinmoqda...")
+print("Harakat sensori tayyor...")
 
-# Ovoz yozib olish
-recording = sd.rec(int(sample_rate * duration), samplerate=sample_rate, channels=2)
-sd.wait()  # Yozib olish tugaguncha kutish
-
-# Faylga saqlash
-write("output.wav", sample_rate, recording)
-
-print("Ovoz muvaffaqiyatli yozib olindi va 'output.wav' fayliga saqlandi.")
+try:
+    while True:
+        if GPIO.input(PIR_PIN):
+            print("Harakat aniqlandi!")
+            time.sleep(1)  # Harakat aniqlandi deb keyingi o'qishni kechiktiradi
+        else:
+            print("Harakat yo'q.")
+        time.sleep(0.1)  # Sensorni qayta tekshirishdan oldin qisqa pauza
+except KeyboardInterrupt:
+    print("Programma to'xtatildi")
+finally:
+    GPIO.cleanup()
