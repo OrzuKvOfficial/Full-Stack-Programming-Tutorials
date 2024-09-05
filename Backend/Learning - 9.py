@@ -1,22 +1,25 @@
 import RPi.GPIO as GPIO
 import time
 
-# GPIO pinlarni sozlash
-PIR_PIN = 7
-GPIO.setmode(GPIO.BOARD)
+# GPIO ayarları
+GPIO.setmode(GPIO.BCM)
+PIR_PIN = 7  # PIR sensörünü bağladığınız pin numarası
+
+# PIR sensörü için ayar
 GPIO.setup(PIR_PIN, GPIO.IN)
 
-print("Harakat sensori tayyor...")
+# Hareket algılandığında tetiklenecek fonksiyon
+def hareket_algilandi(channel):
+    print("Hareket algılandı!")
+
+# PIR pinine olay ekleme
+GPIO.add_event_detect(PIR_PIN, GPIO.RISING, callback=hareket_algilandi)
 
 try:
+    print("Hareket algılanıyor...")
     while True:
-        if GPIO.input(PIR_PIN):
-            print("Harakat aniqlandi!")
-            time.sleep(1)  # Harakat aniqlandi deb keyingi o'qishni kechiktiradi
-        else:
-            print("Harakat yo'q.")
-        time.sleep(0.1)  # Sensorni qayta tekshirishdan oldin qisqa pauza
+        time.sleep(1)  # Sürekli olarak çalışır ve hareketi kontrol eder
 except KeyboardInterrupt:
-    print("Programma to'xtatildi")
+    print("Program sonlandırıldı")
 finally:
-    GPIO.cleanup()
+    GPIO.cleanup()  # GPIO ayarlarını sıfırlar
