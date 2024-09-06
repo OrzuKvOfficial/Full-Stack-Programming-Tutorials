@@ -1,25 +1,27 @@
-import RPi.GPIO as GPIO
-import time
+# Oddiy hisoblash mashinasi
+def calculator():
+    print("Amallar: +, -, *, /")
+    operation = input("Amalni tanlang: ")
 
-# GPIO ayarları
-GPIO.setmode(GPIO.BCM)
-PIR_PIN = 7  # PIR sensörünü bağladığınız pin numarası
+    if operation in ['+', '-', '*', '/']:
+        try:
+            num1 = float(input("Birinchi sonni kiriting: "))
+            num2 = float(input("Ikkinchi sonni kiriting: "))
 
-# PIR sensörü için ayar
-GPIO.setup(PIR_PIN, GPIO.IN)
+            if operation == '+':
+                print(f"Natija: {num1} + {num2} = {num1 + num2}")
+            elif operation == '-':
+                print(f"Natija: {num1} - {num2} = {num1 - num2}")
+            elif operation == '*':
+                print(f"Natija: {num1} * {num2} = {num1 * num2}")
+            elif operation == '/':
+                if num2 != 0:
+                    print(f"Natija: {num1} / {num2} = {num1 / num2}")
+                else:
+                    print("Xatolik: nolga bo'lish mumkin emas!")
+        except ValueError:
+            print("Xatolik: raqamlarni to'g'ri kiriting!")
+    else:
+        print("Xatolik: noto'g'ri amal tanlandi!")
 
-# Hareket algılandığında tetiklenecek fonksiyon
-def hareket_algilandi(channel):
-    print("Hareket algılandı!")
-
-# PIR pinine olay ekleme
-GPIO.add_event_detect(PIR_PIN, GPIO.RISING, callback=hareket_algilandi)
-
-try:
-    print("Hareket algılanıyor...")
-    while True:
-        time.sleep(1)  # Sürekli olarak çalışır ve hareketi kontrol eder
-except KeyboardInterrupt:
-    print("Program sonlandırıldı")
-finally:
-    GPIO.cleanup()  # GPIO ayarlarını sıfırlar
+calculator()
