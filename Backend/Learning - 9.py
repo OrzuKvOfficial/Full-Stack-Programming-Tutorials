@@ -1,27 +1,9 @@
-# Oddiy hisoblash mashinasi
-def calculator():
-    print("Amallar: +, -, *, /")
-    operation = input("Amalni tanlang: ")
+# Sonlarni ko'paytirish va bo'lish
+son1 = 20
+son2 = 4
 
-    if operation in ['+', '-', '*', '/']:
-        try:
-            num1 = float(input("Birinchi sonni kiriting: "))
-            num2 = float(input("Ikkinchi sonni kiriting: "))
+kopaytma = son1 * son2
+bolinma = son1 / son2
 
-            if operation == '+':
-                print(f"Natija: {num1} + {num2} = {num1 + num2}")
-            elif operation == '-':
-                print(f"Natija: {num1} - {num2} = {num1 - num2}")
-            elif operation == '*':
-                print(f"Natija: {num1} * {num2} = {num1 * num2}")
-            elif operation == '/':
-                if num2 != 0:
-                    print(f"Natija: {num1} / {num2} = {num1 / num2}")
-                else:
-                    print("Xatolik: nolga bo'lish mumkin emas!")
-        except ValueError:
-            print("Xatolik: raqamlarni to'g'ri kiriting!")
-    else:
-        print("Xatolik: noto'g'ri amal tanlandi!")
-
-calculator()
+print("Ko'paytma:", kopaytma)
+print("Bolinma:", bolinma)
