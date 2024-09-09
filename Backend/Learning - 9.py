@@ -1,16 +1,9 @@
-# Aralash turdagi list
-my_list = [1, "hello", 3.5, True]
+def fibonacci(n):
+    fib_sequence = [0, 1]
+    while len(fib_sequence) < n:
+        fib_sequence.append(fib_sequence[-1] + fib_sequence[-2])
+    return fib_sequence
 
-# Har xil turlarga ko'ra tahrirlash
-for i in range(len(my_list)):
-    if isinstance(my_list[i], int):
-        my_list[i] += 10
-    elif isinstance(my_list[i], str):
-        my_list[i] = my_list[i].upper()
-    elif isinstance(my_list[i], float):
-        my_list[i] = round(my_list[i])
-    elif isinstance(my_list[i], bool):
-        my_list[i] = not my_list[i]
-
-# Natijani chop etish
-print(my_list)
+n = 10  # Fibonacci sonlarining soni
+fib_numbers = fibonacci(n)
+print(f"{n} ta Fibonacci sonlari: {fib_numbers}")
