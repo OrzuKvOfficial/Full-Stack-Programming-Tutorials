@@ -1,9 +1,19 @@
-def fibonacci(n):
-    fib_sequence = [0, 1]
-    while len(fib_sequence) < n:
-        fib_sequence.append(fib_sequence[-1] + fib_sequence[-2])
-    return fib_sequence
+import torch
+import torch.nn as nn
+import torch.optim as optim
 
-n = 10  # Fibonacci sonlarining soni
-fib_numbers = fibonacci(n)
-print(f"{n} ta Fibonacci sonlari: {fib_numbers}")
+# Oddiy neyron tarmoq
+class Net(nn.Module):
+    def __init__(self):
+        super(Net, self).__init__()
+        self.fc1 = nn.Linear(784, 128)
+        self.fc2 = nn.Linear(128, 10)
+
+    def forward(self, x):
+        x = torch.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+
+# Model va optimizer
+model = Net()
+optimizer = optim.Adam(model.parameters())
