@@ -1,36 +1,28 @@
-import os
+# Musiqa ma'lumotlari
+songs = [
+    {"name": "Song A", "genre": "Pop", "length": 3.5},
+    {"name": "Song B", "genre": "Rock", "length": 4.2},
+    {"name": "Song C", "genre": "Jazz", "length": 5.1},
+    {"name": "Song D", "genre": "Pop", "length": 2.9},
+    {"name": "Song E", "genre": "Rock", "length": 3.7},
+    {"name": "Song F", "genre": "Jazz", "length": 4.5}
+]
 
-# Musiqa fayllari uchun ruxsat etilgan formatlar
-ALLOWED_EXTENSIONS = ['mp3', 'wav', 'flac', 'aac']
+# Janr bo'yicha filtr
+def filter_by_genre(songs, genre):
+    return [song for song in songs if song['genre'].lower() == genre.lower()]
 
-# Faylning kengaytmasini tekshirish
-def is_music_file(filename):
-    return filename.split('.')[-1].lower() in ALLOWED_EXTENSIONS
+# Davomiylik bo'yicha filtr
+def filter_by_length(songs, min_length, max_length):
+    return [song for song in songs if min_length <= song['length'] <= max_length]
 
-# Berilgan katalogdagi barcha musiqa fayllarini saralash
-def list_music_files(directory):
-    music_files = []
-    for root, dirs, files in os.walk(directory):
-        for file in files:
-            if is_music_file(file):
-                music_files.append(os.path.join(root, file))
-    return music_files
+# Musiqalarni saralash
+def sort_songs(songs, key):
+    return sorted(songs, key=lambda x: x[key])
 
-# Musiqa fayllari orasida qidiruv
-def search_music_files(directory, search_query):
-    music_files = list_music_files(directory)
-    found_files = [file for file in music_files if search_query.lower() in os.path.basename(file).lower()]
-    return found_files
+# Foydalanish:
+filtered_songs = filter_by_genre(songs, "Pop")
+sorted_songs = sort_songs(filtered_songs, "length")
 
-# Katalogni kiritish va qidiruvni amalga oshirish
-directory = input("Musiqa fayllari saqlangan katalogni kiriting: ")
-search_query = input("Qidirilayotgan musiqa nomi yoki qismidan parcha kiriting: ")
-
-found_files = search_music_files(directory, search_query)
-
-if found_files:
-    print(f"Topilgan fayllar ({len(found_files)} ta):")
-    for file in found_files:
-        print(file)
-else:
-    print("Hech qanday fayl topilmadi.")
+for song in sorted_songs:
+    print(f"Name: {song['name']}, Length: {song['length']} min")
