@@ -1,27 +1,15 @@
-import os
-import time
+from googletrans import Translator
 
-# Fayl katalogini ko'rsatamiz
-directory = "/sizning/katalogingiz"
+# Initialize the translator
+translator = Translator()
 
-# Dastur boshlanishida barcha fayllarni o'qish
-initial_files = {f: os.path.getmtime(os.path.join(directory, f)) for f in os.listdir(directory)}
+# Function to translate text from English to Russian
+def translate_to_russian(text):
+    translation = translator.translate(text, src='en', dest='ru')
+    return translation.text
 
-while True:
-    current_files = {f: os.path.getmtime(os.path.join(directory, f)) for f in os.listdir(directory)}
-
-    # Yangi fayllarni topish
-    new_files = [f for f in current_files if f not in initial_files]
-    if new_files:
-        print(f"Yangi fayllar: {new_files}")
-
-    # O'zgargan fayllarni topish
-    modified_files = [f for f in current_files if f in initial_files and current_files[f] != initial_files[f]]
-    if modified_files:
-        print(f"O'zgartirilgan fayllar: {modified_files}")
-
-    # Fayllar ro'yxatini yangilaymiz
-    initial_files = current_files
-
-    # Har bir 10 soniyada tekshirib turish
-    time.sleep(10)
+# Example usage
+text_to_translate = "Hello, how are you?"
+translated_text = translate_to_russian(text_to_translate)
+print(f"Original: {text_to_translate}")
+print(f"Translated: {translated_text}")
