@@ -1,17 +1,34 @@
-# Savdo jadvalining hisob mashinasi
+class BankAccount:
+    def __init__(self, account_number, account_holder, balance=0):
+        self.account_number = account_number
+        self.account_holder = account_holder
+        self.balance = balance
 
-def savdo_hisob_mashinasi():
-    jami = 0
-    mahsulotlar_soni = int(input("Nechta mahsulot sotib olishni xohlaysiz? "))
+    def deposit(self, amount):
+        if amount > 0:
+            self.balance += amount
+            print(f"Deposit successful! New balance: {self.balance}")
+        else:
+            print("Invalid deposit amount!")
 
-    for i in range(mahsulotlar_soni):
-        mahsulot_nomi = input(f"{i+1}-mahsulot nomi: ")
-        narx = float(input(f"{mahsulot_nomi}ning narxi (so'm): "))
-        miqdor = int(input(f"{mahsulot_nomi} miqdori: "))
-        umumiy = narx * miqdor
-        jami += umumiy
-        print(f"{mahsulot_nomi} umumiy narxi: {umumiy} so'm\n")
+    def withdraw(self, amount):
+        if amount > 0 and amount <= self.balance:
+            self.balance -= amount
+            print(f"Withdrawal successful! New balance: {self.balance}")
+        else:
+            print("Invalid withdrawal amount or insufficient funds!")
 
-    print(f"Sizning umumiy xarid summangiz: {jami} so'm")
+    def check_balance(self):
+        print(f"Account balance for {self.account_holder}: {self.balance}")
 
-savdo_hisob_mashinasi()
+# Foydalanuvchi uchun hisob yaratish
+account_1 = BankAccount("123456789", "Orzubek Kamariddinov", 500)
+
+# Hisobga pul qo'shish
+account_1.deposit(200)
+
+# Hisobdan pul yechish
+account_1.withdraw(100)
+
+# Balansni tekshirish
+account_1.check_balance()
