@@ -1,27 +1,19 @@
-import time
-from watchdog.observers import Observer
-from watchdog.events import FileSystemEventHandler
+import openai
 
-class MyHandler(FileSystemEventHandler):
-    def on_created(self, event):
-        print(f'Fayl yaratildi: {event.src_path}')
-        
-    def on_modified(self, event):
-        print(f'Fayl o‘zgartirildi: {event.src_path}')
-        
-    def on_deleted(self, event):
-        print(f'Fayl o‘chirildi: {event.src_path}')
+# OpenAI API kalitingiz
+openai.api_key = 'YOUR_API_KEY'
 
-if __name__ == "__main__":
-    path = "."  # Kuzatiladigan papka manzili (joriy papka)
-    event_handler = MyHandler()
-    observer = Observer()
-    observer.schedule(event_handler, path, recursive=True)
-    observer.start()
+# ChatGPT bilan suhbatlashish funksiyasi
+def chat_with_gpt(prompt):
+    response = openai.Completion.create(
+        engine="text-davinci-003",  # "gpt-3.5-turbo" yoki "gpt-4"dan foydalanishingiz mumkin
+        prompt=prompt,
+        max_tokens=150
+    )
+    return response.choices[0].text.strip()
 
-    try:
-        while True:
-            time.sleep(1)
-    except KeyboardInterrupt:
-        observer.stop()
-    observer.join()
+# Foydalanuvchi savolini berish
+user_prompt = "What is the capital of Uzbekistan?"
+gpt_response = chat_with_gpt(user_prompt)
+
+print(gpt_response)
