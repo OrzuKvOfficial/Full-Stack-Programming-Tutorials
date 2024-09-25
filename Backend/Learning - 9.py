@@ -1,19 +1,22 @@
-import openai
+import tkinter as tk
 
-# OpenAI API kalitingiz
-openai.api_key = 'YOUR_API_KEY'
+def update_position(event):
+    cursor_pos = text.index(tk.INSERT)  # Kursorning pozitsiyasini olish
+    pos_label.config(text=f"Kursor pozitsiyasi: {cursor_pos}")
 
-# ChatGPT bilan suhbatlashish funksiyasi
-def chat_with_gpt(prompt):
-    response = openai.Completion.create(
-        engine="text-davinci-003",  # "gpt-3.5-turbo" yoki "gpt-4"dan foydalanishingiz mumkin
-        prompt=prompt,
-        max_tokens=150
-    )
-    return response.choices[0].text.strip()
+# Oyna yaratish
+root = tk.Tk()
+root.title("Kursor kuzatish")
 
-# Foydalanuvchi savolini berish
-user_prompt = "What is the capital of Uzbekistan?"
-gpt_response = chat_with_gpt(user_prompt)
+# Matn maydoni
+text = tk.Text(root, height=10, width=40)
+text.pack()
 
-print(gpt_response)
+# Pozitsiya ko'rsatish uchun yorliq
+pos_label = tk.Label(root, text="Kursor pozitsiyasi: 1.0")
+pos_label.pack()
+
+# Kursor harakati kuzatilganda funksiya chaqiriladi
+text.bind("<KeyRelease>", update_position)
+
+root.mainloop()
