@@ -1,22 +1,35 @@
-import tkinter as tk
+# Qabul qilish bo'limi uchun Python dasturi
 
-def update_position(event):
-    cursor_pos = text.index(tk.INSERT)  # Kursorning pozitsiyasini olish
-    pos_label.config(text=f"Kursor pozitsiyasi: {cursor_pos}")
+class Patient:
+    def __init__(self, name, age, ailment):
+        self.name = name
+        self.age = age
+        self.ailment = ailment
 
-# Oyna yaratish
-root = tk.Tk()
-root.title("Kursor kuzatish")
+    def display_info(self):
+        return f"Name: {self.name}, Age: {self.age}, Ailment: {self.ailment}"
 
-# Matn maydoni
-text = tk.Text(root, height=10, width=40)
-text.pack()
+class Reception:
+    def __init__(self):
+        self.patients_list = []
 
-# Pozitsiya ko'rsatish uchun yorliq
-pos_label = tk.Label(root, text="Kursor pozitsiyasi: 1.0")
-pos_label.pack()
+    def add_patient(self, name, age, ailment):
+        new_patient = Patient(name, age, ailment)
+        self.patients_list.append(new_patient)
 
-# Kursor harakati kuzatilganda funksiya chaqiriladi
-text.bind("<KeyRelease>", update_position)
+    def show_all_patients(self):
+        if self.patients_list:
+            for patient in self.patients_list:
+                print(patient.display_info())
+        else:
+            print("No patients in the list.")
 
-root.mainloop()
+# Qabul qilish bo'limi bilan ishlash
+reception = Reception()
+
+# Bemorlarni qo'shish
+reception.add_patient("John Doe", 30, "Flu")
+reception.add_patient("Jane Smith", 25, "Headache")
+
+# Barcha bemorlarni ko'rsatish
+reception.show_all_patients()
