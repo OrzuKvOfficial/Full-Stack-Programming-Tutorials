@@ -1,35 +1,17 @@
-# Qabul qilish bo'limi uchun Python dasturi
+from telegram import Update
+from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
 
-class Patient:
-    def __init__(self, name, age, ailment):
-        self.name = name
-        self.age = age
-        self.ailment = ailment
+# "/start" komandasi uchun ishlatiladigan funksiya
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_text(f'Hello, {update.effective_user.first_name}!')
 
-    def display_info(self):
-        return f"Name: {self.name}, Age: {self.age}, Ailment: {self.ailment}"
+if __name__ == '__main__':
+    # Bot tokenini kiritamiz
+    application = ApplicationBuilder().token('YOUR_BOT_TOKEN').build()
 
-class Reception:
-    def __init__(self):
-        self.patients_list = []
+    # "start" komandasi uchun handler yaratamiz
+    start_handler = CommandHandler('start', start)
+    application.add_handler(start_handler)
 
-    def add_patient(self, name, age, ailment):
-        new_patient = Patient(name, age, ailment)
-        self.patients_list.append(new_patient)
-
-    def show_all_patients(self):
-        if self.patients_list:
-            for patient in self.patients_list:
-                print(patient.display_info())
-        else:
-            print("No patients in the list.")
-
-# Qabul qilish bo'limi bilan ishlash
-reception = Reception()
-
-# Bemorlarni qo'shish
-reception.add_patient("John Doe", 30, "Flu")
-reception.add_patient("Jane Smith", 25, "Headache")
-
-# Barcha bemorlarni ko'rsatish
-reception.show_all_patients()
+    # Botni ishga tushiramiz
+    application.run_polling()
