@@ -1,17 +1,20 @@
-from telegram import Update
-from telegram.ext import ApplicationBuilder, CommandHandler, ContextTypes
+import time
 
-# "/start" komandasi uchun ishlatiladigan funksiya
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
-    await update.message.reply_text(f'Hello, {update.effective_user.first_name}!')
+# Vazn yo'qotish bo'yicha maslahatlar
+tips = [
+    "Suvni ko'proq iching!",
+    "Ko'proq harakat qiling, masalan, piyoda yuring!",
+    "Sog'lom ovqatlaning, sabzavotlar va mevalarni ko'paytiring!",
+    "Kundalik kaloriya hisobini olib boring!",
+    "Kecha ovqatlanishni kamaytiring va uyquga e'tibor bering!"
+]
 
-if __name__ == '__main__':
-    # Bot tokenini kiritamiz
-    application = ApplicationBuilder().token('YOUR_BOT_TOKEN').build()
+# Eslatma funksiyasi
+def weight_loss_reminder(interval, repetitions):
+    for i in range(repetitions):
+        tip = tips[i % len(tips)]  # Maslahatlarni aylantirib chiqarish
+        print(f"Eslatma: {tip}")
+        time.sleep(interval)  # Belgilangan vaqt oralig'ida kutish (sekundda)
 
-    # "start" komandasi uchun handler yaratamiz
-    start_handler = CommandHandler('start', start)
-    application.add_handler(start_handler)
-
-    # Botni ishga tushiramiz
-    application.run_polling()
+# Har 10 soniyada 5 eslatma chiqarish
+weight_loss_reminder(10, 5)
