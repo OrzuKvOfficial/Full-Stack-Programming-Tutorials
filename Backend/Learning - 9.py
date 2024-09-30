@@ -1,40 +1,45 @@
 import cv2
-import mediapipe as mp
 
-# Mediapipe yuzni aniqlash modeli
-mp_face_detection = mp.solutions.face_detection
-mp_drawing = mp.solutions.drawing_utils
+# Yuzni aniqlash uchun OpenCV Haar Cascade modelini yuklash
+face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
+smile_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_smile.xml')
 
-# Kamera orqali video oqimini olish
+# Kamerani yoqish
 cap = cv2.VideoCapture(0)
 
-with mp_face_detection.FaceDetection(model_selection=1, min_detection_confidence=0.5) as face_detection:
-    while cap.isOpened():
-        success, image = cap.read()
-        if not success:
-            print("Kameradan oqib olishning imkoni yo'q")
-            break
+while True:
+    # Videoni oqish
+    ret, frame = cap.read()
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    
+    # Yuzni aniqlash
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5, minSize=(30, 30))
+    
+    for (x, y, w, h) in faces:
+        # Yuz atrofiga to‘g‘ri to‘rtburchak chizish
+        cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
+        
+        # Yuz sohasidan faqat og‘iz qismini qidirish
+        roi_gray = gray[y:y+h, x:x+w]
+        roi_color = frame[y:y+h, x:x+w]
+        
+        # Tabassumni aniqlash
+        smiles = smile_cascade.detectMultiScale(roi_gray, scaleFactor=1.8, minNeighbors=20)
+        
+        for (sx, sy, sw, sh) in smiles:
+            # Agar tabassum bo'lsa, uni ifodalash
+            cv2.rectangle(roi_color, (sx, sy), (sx+sw, sy+sh), (0, 255, 0), 2)
+            
+            # "Smile detected!" matnini ko‘rsatish
+            cv2.putText(frame, 'Smile detected!', (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
+    
+    # Natijani ko‘rsatish
+    cv2.imshow('Smile Detector', frame)
+    
+    # 'q' tugmasini bosish bilan chiqish
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
 
-        # BGR tasvirni RGB ga aylantirish
-        image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        results = face_detection.process(image_rgb)
-
-        # Yuzni aniqlash
-        if results.detections:
-            for detection in results.detections:
-                # Yuzni rasmga chizish
-                mp_drawing.draw_detection(image, detection)
-
-                # Agar kerak bo'lsa, bu yerda ko'zoynakni aniqlash uchun algoritm qo'shishingiz mumkin
-                # Masalan, ko'zning holatini tahlil qilish va ko'zoynak belgilarini qidirish
-                # Shuningdek, ko'zoynak taqmaganligini aniqlaganda eslatish xabarini chiqarish
-
-        # Oynada tasvirni ko'rsatish
-        cv2.imshow('Camera', image)
-
-        # Qandaydir tugmani bosganda chiqib ketish
-        if cv2.waitKey(5) & 0xFF == 27:
-            break
-
+# Kamerani o'chirish va oynani yopish
 cap.release()
 cv2.destroyAllWindows()
