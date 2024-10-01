@@ -1,45 +1,25 @@
-import cv2
+# Vazn va bo'y bo'yicha kunlik suv miqdorini hisoblash
+def daily_water_intake(weight_kg):
+    # Har bir kilogramm vazn uchun 30-35 ml suv ichish tavsiya qilinadi
+    # O'rtacha hisobda har kg uchun 32.5 ml suv ichish kerak
+    water_ml_per_kg = 32.5
+    daily_intake_ml = weight_kg * water_ml_per_kg  # kunlik suv miqdori (ml)
+    daily_intake_l = daily_intake_ml / 1000  # litrga o'tkazamiz
+    return daily_intake_l
 
-# Yuzni aniqlash uchun OpenCV Haar Cascade modelini yuklash
-face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
-smile_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_smile.xml')
+# Oylik suv miqdorini hisoblash
+def monthly_water_intake(weight_kg):
+    daily_intake_l = daily_water_intake(weight_kg)
+    monthly_intake_l = daily_intake_l * 30  # 1 oyda 30 kun bor deb hisoblaymiz
+    return monthly_intake_l
 
-# Kamerani yoqish
-cap = cv2.VideoCapture(0)
+# Foydalanuvchi ma'lumotlarini kiritadi
+weight_kg = float(input("Vazningizni kilogrammda kiriting: "))
+height_cm = float(input("Bo'yingizni santimetrda kiriting: "))
 
-while True:
-    # Videoni oqish
-    ret, frame = cap.read()
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    
-    # Yuzni aniqlash
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.3, minNeighbors=5, minSize=(30, 30))
-    
-    for (x, y, w, h) in faces:
-        # Yuz atrofiga to‘g‘ri to‘rtburchak chizish
-        cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
-        
-        # Yuz sohasidan faqat og‘iz qismini qidirish
-        roi_gray = gray[y:y+h, x:x+w]
-        roi_color = frame[y:y+h, x:x+w]
-        
-        # Tabassumni aniqlash
-        smiles = smile_cascade.detectMultiScale(roi_gray, scaleFactor=1.8, minNeighbors=20)
-        
-        for (sx, sy, sw, sh) in smiles:
-            # Agar tabassum bo'lsa, uni ifodalash
-            cv2.rectangle(roi_color, (sx, sy), (sx+sw, sy+sh), (0, 255, 0), 2)
-            
-            # "Smile detected!" matnini ko‘rsatish
-            cv2.putText(frame, 'Smile detected!', (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 255, 0), 2)
-    
-    # Natijani ko‘rsatish
-    cv2.imshow('Smile Detector', frame)
-    
-    # 'q' tugmasini bosish bilan chiqish
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+# Natijalarni hisoblash va chiqarish
+daily_water = daily_water_intake(weight_kg)
+monthly_water = monthly_water_intake(weight_kg)
 
-# Kamerani o'chirish va oynani yopish
-cap.release()
-cv2.destroyAllWindows()
+print(f"Sizning bir kunda ichishingiz kerak bo'lgan suv miqdori: {daily_water:.2f} litr.")
+print(f"Sizning bir oyda ichishingiz kerak bo'lgan suv miqdori: {monthly_water:.2f} litr.")
