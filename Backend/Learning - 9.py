@@ -1,41 +1,27 @@
-import os
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
-# Zararli dastur imzolarini aniqlash uchun oddiy ro'yxat
-malicious_signatures = [
-    "malware_signature_1",
-    "virus_signature_2",
-    "dangerous_code_3"
-]
+def send_email(to_email, subject, body):
+    # Gmail SMTP serverining ma'lumotlari
+    smtp_server = "smtp.gmail.com"
+    smtp_port = 587
+    sender_email = "your_email@gmail.com"
+    sender_password = "your_password"
+    
+    # Emailni tayyorlash
+    msg = MIMEMultipart()
+    msg['From'] = sender_email
+    msg['To'] = to_email
+    msg['Subject'] = subject
+    msg.attach(MIMEText(body, 'plain'))
+    
+    # Serverga ulanish va emailni yuborish
+    server = smtplib.SMTP(smtp_server, smtp_port)
+    server.starttls()
+    server.login(sender_email, sender_password)
+    server.sendmail(sender_email, to_email, msg.as_string())
+    server.quit()
 
-# Berilgan faylning zararli kodini tekshirish funksiyasi
-def scan_file(file_path):
-    try:
-        with open(file_path, 'r', errors='ignore') as file:
-            file_content = file.read()
-            for signature in malicious_signatures:
-                if signature in file_content:
-                    return True
-        return False
-    except:
-        return False
-
-# Fayllarni katalog bo'ylab skanerlash funksiyasi
-def scan_directory(directory_path):
-    infected_files = []
-    for root, dirs, files in os.walk(directory_path):
-        for file in files:
-            file_path = os.path.join(root, file)
-            if scan_file(file_path):
-                infected_files.append(file_path)
-    return infected_files
-
-# Bosh katalogni skanerlash
-directory_to_scan = input("Katalogni kiriting: ")
-infected_files = scan_directory(directory_to_scan)
-
-if infected_files:
-    print("Zararli fayllar topildi:")
-    for file in infected_files:
-        print(file)
-else:
-    print("Hammasi toza, zararli fayllar topilmadi.")
+# Foydalanish
+send_email("student@example.com", "Yangi Dars Qo'shildi", "Siz uchun yangi dars qo'shildi.")
