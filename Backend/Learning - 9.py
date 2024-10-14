@@ -1,35 +1,12 @@
-import random
+import tensorflow as tf
+from tensorflow.keras.preprocessing import image
+import numpy as np
 
-def math_game():
-    print("Matematika o'yiniga xush kelibsiz!")
-    
-    # 10 ta savol beramiz
-    correct_answers = 0
-    for i in range(10):
-        number1 = random.randint(1, 10)
-        number2 = random.randint(1, 10)
-        operation = random.choice(['+', '-', '*'])
-        
-        if operation == '+':
-            correct_result = number1 + number2
-        elif operation == '-':
-            correct_result = number1 - number2
-        else:
-            correct_result = number1 * number2
-        
-        # Savolni chiqaramiz
-        print(f"Savol {i+1}: {number1} {operation} {number2} = ?")
-        user_answer = int(input("Javobingiz: "))
-        
-        # Javobni tekshiramiz
-        if user_answer == correct_result:
-            print("To'g'ri!")
-            correct_answers += 1
-        else:
-            print(f"Noto'g'ri. To'g'ri javob: {correct_result}")
-    
-    # Natija
-    print(f"O'yin tugadi! Siz {correct_answers} ta to'g'ri javob berdingiz.")
+# Rasmni yuklash va oldindan ishlash
+img = image.load_img('rasm_path.jpg', target_size=(224, 224))
+img_array = image.img_to_array(img)
+img_array = np.expand_dims(img_array, axis=0)
 
-# Dastur ishga tushadi
-math_game()
+# Tayyor modelni yuklash va bashorat qilish
+model = tf.keras.applications.MobileNetV2(weights='imagenet')
+preds = model.predict(img_array)
