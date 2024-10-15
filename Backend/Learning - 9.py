@@ -1,12 +1,11 @@
-import tensorflow as tf
-from tensorflow.keras.preprocessing import image
-import numpy as np
+from instabot import Bot
 
-# Rasmni yuklash va oldindan ishlash
-img = image.load_img('rasm_path.jpg', target_size=(224, 224))
-img_array = image.img_to_array(img)
-img_array = np.expand_dims(img_array, axis=0)
+# Instagram hisobingizga ulaning
+bot = Bot()
+bot.login(username='YOUR_USERNAME', password='YOUR_PASSWORD')
 
-# Tayyor modelni yuklash va bashorat qilish
-model = tf.keras.applications.MobileNetV2(weights='imagenet')
-preds = model.predict(img_array)
+# Xabar yuborish
+recipient_username = 'RECIPIENT_USERNAME'
+message = 'Salom, bu Python orqali yuborilgan xabardir!'
+
+bot.send_message(message, [recipient_username])
