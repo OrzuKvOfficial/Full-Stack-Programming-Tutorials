@@ -1,11 +1,12 @@
-from instabot import Bot
+import platform
 
-# Instagram hisobingizga ulaning
-bot = Bot()
-bot.login(username='YOUR_USERNAME', password='YOUR_PASSWORD')
+# Tizim nomi va versiyasi
+print(f"System: {platform.system()}")
+print(f"Release: {platform.release()}")
+print(f"Version: {platform.version()}")
 
-# Xabar yuborish
-recipient_username = 'RECIPIENT_USERNAME'
-message = 'Salom, bu Python orqali yuborilgan xabardir!'
+# Protsessor ma'lumotlari
+print(f"Processor: {platform.processor()}")
 
-bot.send_message(message, [recipient_username])
+# Tizim me'morchiligi (32-bit yoki 64-bit)
+print(f"Architecture: {platform.architecture()[0]}")
