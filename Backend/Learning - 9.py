@@ -1,12 +1,13 @@
-import platform
+def tekshirish(kod):
+    try:
+        exec(kod)
+        print("Kod muvaffaqiyatli bajarildi.")
+    except Exception as e:
+        print(f"Kodda xatolik: {e}")
 
-# Tizim nomi va versiyasi
-print(f"System: {platform.system()}")
-print(f"Release: {platform.release()}")
-print(f"Version: {platform.version()}")
+kod = """
+for i in range(5):
+    print(i)
+"""
 
-# Protsessor ma'lumotlari
-print(f"Processor: {platform.processor()}")
-
-# Tizim me'morchiligi (32-bit yoki 64-bit)
-print(f"Architecture: {platform.architecture()[0]}")
+tekshirish(kod)
