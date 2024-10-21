@@ -1,24 +1,21 @@
-import requests
+from jnius import autoclass
 
-# Valyuta kurslarini olish uchun API'ni qo'llash
-def get_exchange_rate():
-    # OpenExchangeRates yoki boshqa xizmatdan API kalitni qo'shishingiz kerak bo'ladi
-    api_url = "https://api.exchangerate-api.com/v4/latest/USD"
+# Access Android context and connectivity services
+Context = autoclass('android.content.Context')
+ConnectivityManager = autoclass('android.net.ConnectivityManager')
+
+# Function to check Wi-Fi status
+def is_wifi_enabled():
+    # Get the Connectivity Manager
+    context = autoclass('org.kivy.android.PythonActivity').mActivity
+    connectivity_manager = context.getSystemService(Context.CONNECTIVITY_SERVICE)
     
-    # API'dan valyuta kurslarini olish
-    response = requests.get(api_url)
-    data = response.json()
+    # Get network info
+    network_info = connectivity_manager.getActiveNetworkInfo()
     
-    # So'm kursini olish
-    return data["rates"]["UZS"]
+    # Check if the device is connected to Wi-Fi
+    if network_info is not None and network_info.getType() == ConnectivityManager.TYPE_WIFI:
+        return network_info.isConnected()
+    return False
 
-# Foydalanuvchi qancha dollar borligini kiritadi
-dollar_amount = float(input("Dollarda qancha mablag' bor? "))
-
-# Dollar-to-sum kursini olish
-dollar_to_sum = get_exchange_rate()
-
-# So'mdagi mablag'ni hisoblash
-sum_amount = dollar_amount * dollar_to_sum
-
-print(f"{dollar_amount} AQSh dollari {sum_amount:.2f} so'mga teng.")
+print("Wi-Fi Enabled:", is_wifi_enabled())
