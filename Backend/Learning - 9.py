@@ -1,21 +1,10 @@
-from jnius import autoclass
+companies = [
+    ("Company A", 10000, 5000),  # (kompaniya nomi, daromad, foyda)
+    ("Company B", 15000, 3000),
+    ("Company C", 12000, 7000),
+]
 
-# Access Android context and connectivity services
-Context = autoclass('android.content.Context')
-ConnectivityManager = autoclass('android.net.ConnectivityManager')
-
-# Function to check Wi-Fi status
-def is_wifi_enabled():
-    # Get the Connectivity Manager
-    context = autoclass('org.kivy.android.PythonActivity').mActivity
-    connectivity_manager = context.getSystemService(Context.CONNECTIVITY_SERVICE)
-    
-    # Get network info
-    network_info = connectivity_manager.getActiveNetworkInfo()
-    
-    # Check if the device is connected to Wi-Fi
-    if network_info is not None and network_info.getType() == ConnectivityManager.TYPE_WIFI:
-        return network_info.isConnected()
-    return False
-
-print("Wi-Fi Enabled:", is_wifi_enabled())
+# Foyda (profit) bo'yicha saralash
+companies_sorted = sorted(companies, key=lambda x: x[2], reverse=True)
+for company in companies_sorted:
+    print(company)
