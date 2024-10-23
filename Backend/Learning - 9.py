@@ -1,10 +1,14 @@
-companies = [
-    ("Company A", 10000, 5000),  # (kompaniya nomi, daromad, foyda)
-    ("Company B", 15000, 3000),
-    ("Company C", 12000, 7000),
-]
+# Tezlikni hisoblash uchun programma
+# Formula: tezlik = masofa / vaqt
 
-# Foyda (profit) bo'yicha saralash
-companies_sorted = sorted(companies, key=lambda x: x[2], reverse=True)
-for company in companies_sorted:
-    print(company)
+# Masofa (kilometr) va vaqt (soat) kiriting
+masofa = float(input("Masofani kiriting (km): "))
+vaqt = float(input("Vaqtni kiriting (soat): "))
+
+# Tezlikni hisoblash
+if vaqt > 0:
+    tezlik = masofa / vaqt
+    print(f"Tezlik: {tezlik} km/soat")
+else:
+    print("Vaqt 0 dan katta bo'lishi kerak.")
+
