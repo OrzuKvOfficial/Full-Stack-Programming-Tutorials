@@ -1,14 +1,37 @@
-# Tezlikni hisoblash uchun programma
-# Formula: tezlik = masofa / vaqt
+import pygame
+import os
 
-# Masofa (kilometr) va vaqt (soat) kiriting
-masofa = float(input("Masofani kiriting (km): "))
-vaqt = float(input("Vaqtni kiriting (soat): "))
+# Pygame kutubxonasini boshlash
+pygame.mixer.init()
 
-# Tezlikni hisoblash
-if vaqt > 0:
-    tezlik = masofa / vaqt
-    print(f"Tezlik: {tezlik} km/soat")
+# Musiqa fayllarini topish funksiyasi
+def find_music_files(directory):
+    music_files = []
+    for file in os.listdir(directory):
+        if file.endswith(".mp3"):
+            music_files.append(file)
+    return music_files
+
+# Musiqalarni ijro etish funksiyasi
+def play_music(music_file):
+    pygame.mixer.music.load(music_file)
+    pygame.mixer.music.play()
+    print(f"Ijro etilmoqda: {music_file}")
+
+# Musiqa fayllarini qidirish
+directory = "."  # Joriy papkani ko'rsatish
+music_files = find_music_files(directory)
+
+if not music_files:
+    print("Musiqa fayllari topilmadi.")
 else:
-    print("Vaqt 0 dan katta bo'lishi kerak.")
+    print("Musiqalar ro'yxati:")
+    for i, file in enumerate(music_files):
+        print(f"{i + 1}. {file}")
 
+    # Musiqa tanlash va ijro etish
+    choice = int(input("Ijro etish uchun musiqaning raqamini kiriting: ")) - 1
+    if 0 <= choice < len(music_files):
+        play_music(music_files[choice])
+    else:
+        print("Notog'ri tanlov.")
