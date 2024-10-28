@@ -1,37 +1,13 @@
-import pygame
-import os
+from PIL import Image
 
-# Pygame kutubxonasini boshlash
-pygame.mixer.init()
+# Rasm nomini id sifatida belgilaymiz
+rasm_id = "image123.jpg"
 
-# Musiqa fayllarini topish funksiyasi
-def find_music_files(directory):
-    music_files = []
-    for file in os.listdir(directory):
-        if file.endswith(".mp3"):
-            music_files.append(file)
-    return music_files
+# Rasmni yuklash
+rasm = Image.open(rasm_id)
 
-# Musiqalarni ijro etish funksiyasi
-def play_music(music_file):
-    pygame.mixer.music.load(music_file)
-    pygame.mixer.music.play()
-    print(f"Ijro etilmoqda: {music_file}")
+# Rasmni o'zgartirish: masalan, o'lchamini kichiklashtirish
+rasm = rasm.resize((200, 200))
 
-# Musiqa fayllarini qidirish
-directory = "."  # Joriy papkani ko'rsatish
-music_files = find_music_files(directory)
-
-if not music_files:
-    print("Musiqa fayllari topilmadi.")
-else:
-    print("Musiqalar ro'yxati:")
-    for i, file in enumerate(music_files):
-        print(f"{i + 1}. {file}")
-
-    # Musiqa tanlash va ijro etish
-    choice = int(input("Ijro etish uchun musiqaning raqamini kiriting: ")) - 1
-    if 0 <= choice < len(music_files):
-        play_music(music_files[choice])
-    else:
-        print("Notog'ri tanlov.")
+# Rasmni saqlash
+rasm.save("new_" + rasm_id)
