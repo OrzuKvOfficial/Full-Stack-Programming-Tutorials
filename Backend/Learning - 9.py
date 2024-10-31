@@ -1,28 +1,23 @@
-class BankAccount:
-    def __init__(self, account_name, initial_balance=0):
-        self.account_name = account_name
-        self.balance = initial_balance
+import socket
 
-    def deposit(self, amount):
-        if amount > 0:
-            self.balance += amount
-            print(f"${amount} qo'shildi. Joriy balans: ${self.balance}")
-        else:
-            print("Miqdorni to'g'ri kiriting.")
+def scan_ports(ip, start_port, end_port):
+    open_ports = []
+    for port in range(start_port, end_port + 1):
+        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        sock.settimeout(1)
+        result = sock.connect_ex((ip, port))
+        if result == 0:
+            open_ports.append(port)
+        sock.close()
+    return open_ports
 
-    def withdraw(self, amount):
-        if 0 < amount <= self.balance:
-            self.balance -= amount
-            print(f"${amount} yechildi. Joriy balans: ${self.balance}")
-        else:
-            print("Yetarli mablag' mavjud emas yoki noto'g'ri miqdor kiritildi.")
+# Misol uchun 127.0.0.1 IP manzilidagi portlarni skanerlaymiz
+ip_address = "127.0.0.1"
+start_port = 1
+end_port = 1024
 
-    def check_balance(self):
-        print(f"{self.account_name} balansingiz: ${self.balance}")
-
-# Misol
-account1 = BankAccount("Orzubek", 100)  # Boshlang'ich balans $100
-account1.check_balance()                 # Balansni tekshirish
-account1.deposit(50)                     # Balansga $50 qo'shish
-account1.withdraw(30)                    # Balansdan $30 yechish
-account1.check_balance()                 # Yangi balansni tekshirish
+open_ports = scan_ports(ip_address, start_port, end_port)
+if open_ports:
+    print(f"Ochiq portlar: {open_ports}")
+else:
+    print("Ochiq portlar topilmadi.")
