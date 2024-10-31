@@ -1,23 +1,15 @@
-import socket
+from langdetect import detect, DetectorFactory
 
-def scan_ports(ip, start_port, end_port):
-    open_ports = []
-    for port in range(start_port, end_port + 1):
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        sock.settimeout(1)
-        result = sock.connect_ex((ip, port))
-        if result == 0:
-            open_ports.append(port)
-        sock.close()
-    return open_ports
+# Natijani tasodifiylikka qarshi barqaror qilish
+DetectorFactory.seed = 0
 
-# Misol uchun 127.0.0.1 IP manzilidagi portlarni skanerlaymiz
-ip_address = "127.0.0.1"
-start_port = 1
-end_port = 1024
+def detect_language(text):
+    try:
+        language = detect(text)
+        return language
+    except:
+        return "Language could not be detected."
 
-open_ports = scan_ports(ip_address, start_port, end_port)
-if open_ports:
-    print(f"Ochiq portlar: {open_ports}")
-else:
-    print("Ochiq portlar topilmadi.")
+# Foydalanish
+text = "Bu yerda siz matnni kiriting."
+print(f"Tilingiz: {detect_language(text)}")
