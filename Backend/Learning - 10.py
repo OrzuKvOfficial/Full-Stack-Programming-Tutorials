@@ -1,22 +1,12 @@
-import time
+from datetime import datetime
 
-# Soatning ishlash vaqtini va intervalini belgilash
-working_time = 60  # Ishlash vaqti, masalan, 60 soniya
-interval = 1  # Sekund oralig'ida vaqtni yangilash
+# Hozirgi vaqt va sanani olish
+hozirgi_vaqt = datetime.now()
 
-# Soatni ishga tushirish
-start_time = time.time()
-current_time = 0
+# Sanani formatlash
+sana = hozirgi_vaqt.strftime("%Y-%m-%d")  # yil-oy-kun formatida
+vaqt = hozirgi_vaqt.strftime("%H:%M:%S")  # soat:dakika:sekund formatida
 
-while current_time < working_time:
-    # Hozirgi vaqtni hisoblash
-    current_time = time.time() - start_time
-    # Soat ko'rinishini yaratish
-    minutes = int(current_time // 60)
-    seconds = int(current_time % 60)
-    print(f"{minutes:02}:{seconds:02}", end="\r")
-    
-    # Belgilangan intervalda kutish
-    time.sleep(interval)
-    
-print("\nSoat tugadi!")
+# Natijani chop etish
+print("Bugungi sana:", sana)
+print("Hozirgi vaqt:", vaqt)
