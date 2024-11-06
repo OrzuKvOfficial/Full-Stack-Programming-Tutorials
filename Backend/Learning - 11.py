@@ -1,12 +1,13 @@
-import geocoder
+import hashlib
 
-# IP manzil orqali hozirgi joylashuvni aniqlash
-g = geocoder.ip('me')
+def fayl_hashini_olish(fayl_nomi):
+    hash_obj = hashlib.sha256()
+    with open(fayl_nomi, "rb") as fayl:
+        for qism in iter(lambda: fayl.read(4096), b""):
+            hash_obj.update(qism)
+    return hash_obj.hexdigest()
 
-if g.ok:
-    print("Sizning joylashuvingiz:")
-    print(f"Shahar: {g.city}")
-    print(f"Mamlakat: {g.country}")
-    print(f"Koordinatalar: {g.latlng}")
-else:
-    print("Joylashuv aniqlanmadi.")
+# Hashni tekshirish
+fayl_nomi = "tekshir_fayl.txt"
+hashi = fayl_hashini_olish(fayl_nomi)
+print("Faylning SHA-256 hash qiymati:", hashi)
