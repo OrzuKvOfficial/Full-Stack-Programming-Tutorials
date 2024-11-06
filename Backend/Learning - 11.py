@@ -1,13 +1,18 @@
-import hashlib
-
-def fayl_hashini_olish(fayl_nomi):
-    hash_obj = hashlib.sha256()
-    with open(fayl_nomi, "rb") as fayl:
-        for qism in iter(lambda: fayl.read(4096), b""):
-            hash_obj.update(qism)
-    return hash_obj.hexdigest()
-
-# Hashni tekshirish
-fayl_nomi = "tekshir_fayl.txt"
-hashi = fayl_hashini_olish(fayl_nomi)
-print("Faylning SHA-256 hash qiymati:", hashi)
+# Fayl ichida shubhali buyruqlarni qidirish
+def zararli_kodni_tekshirish(fayl_nomi):
+    shubhali_sozlar = ["eval(", "exec(", "import os", "subprocess", "open(", "socket"]
+    zararli = False
+    
+    with open(fayl_nomi, "r", encoding="utf-8") as fayl:
+        for qator in fayl:
+            if any(soz in qator for soz in shubhali_sozlar):
+                zararli = True
+                print("Zararli kod topildi:", qator.strip())
+    
+    if zararli:
+        print("Faylda zararli kod topildi.")
+    else:
+        print("Fayl xavfsiz.")
+        
+# Faylni tekshirish
+zararli_kodni_tekshirish("tekshir_fayl.txt")
