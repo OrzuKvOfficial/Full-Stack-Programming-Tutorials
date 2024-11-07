@@ -1,18 +1,20 @@
-# Fayl ichida shubhali buyruqlarni qidirish
-def zararli_kodni_tekshirish(fayl_nomi):
-    shubhali_sozlar = ["eval(", "exec(", "import os", "subprocess", "open(", "socket"]
-    zararli = False
+import re
+
+def find_phone_numbers(text):
+    # Telefon raqami formatiga mos keluvchi regex
+    phone_pattern = r"\+?\d{1,3}[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
     
-    with open(fayl_nomi, "r", encoding="utf-8") as fayl:
-        for qator in fayl:
-            if any(soz in qator for soz in shubhali_sozlar):
-                zararli = True
-                print("Zararli kod topildi:", qator.strip())
+    # Muntazam ifoda bo‘yicha barcha mos keluvchi raqamlarni topamiz
+    phone_numbers = re.findall(phone_pattern, text)
     
-    if zararli:
-        print("Faylda zararli kod topildi.")
-    else:
-        print("Fayl xavfsiz.")
-        
-# Faylni tekshirish
-zararli_kodni_tekshirish("tekshir_fayl.txt")
+    return phone_numbers
+
+# Sinov matni
+text = """
+Mana mening telefon raqamlarim: +1 347 841 4140 yoki (347) 841-4140.
+Mening boshqa telefon raqamim +998-90-123-45-67.
+"""
+
+# Telefon raqamlarini topish
+found_numbers = find_phone_numbers(text)
+print("Topilgan telefon raqamlari:", found_numbers)
