@@ -1,10 +1,25 @@
-import re
+import os
 
-def find_phone_numbers(text):
-    phone_pattern = r"\+?\d{1,3}[-.\s]?\(?\d{1,4}\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-
-    phone_numbers = re.findall(phone_pattern, text)
+def load_files(directory):
+    files_data = {}
     
-    return phone_numbers
+    # Papkada mavjud barcha fayllarni ko'rish
+    for filename in os.listdir(directory):
+        # Faqatgina asosiy fayllarni yuklash (masalan: `.txt` va `.csv`)
+        if filename.endswith('.txt') or filename.endswith('.csv'):
+            file_path = os.path.join(directory, filename)
+            
+            # Faylni o'qish
+            with open(file_path, 'r', encoding='utf-8') as file:
+                files_data[filename] = file.read()
+    
+    return files_data
 
-text = """
+# Foydalanish
+directory_path = 'your_directory_path_here'  # Fayllar saqlangan papka yo'lini kiriting
+loaded_files = load_files(directory_path)
+
+# Yuklangan fayllarni ko'rsatish
+for filename, content in loaded_files.items():
+    print(f"Fayl nomi: {filename}")
+    print(f"Kontent:\n{content}\n")
