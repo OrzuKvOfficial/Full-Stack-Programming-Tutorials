@@ -1,19 +1,18 @@
-# Keldi yoki kelmadi dasturi
-def ishga_kelganmi(odamlar):
-    kelganlar = {}
-    for odam in odamlar:
-        javob = input(f"{odam} ishga keldimi? (ha/yo'q): ").strip().lower()
-        if javob == "ha":
-            kelganlar[odam] = "Keldi"
-        else:
-            kelganlar[odam] = "Kelmadi"
-    return kelganlar
+# Listni yig'uvchi programma
+def list_yiguvchi():
+    asosiy_list = []  # Bo'sh list yaratamiz
+    print("Listni to'ldirishni boshlang. Tugatish uchun 'exit' kiriting.")
+    
+    while True:
+        element = input("Element kiriting: ")
+        
+        if element.lower() == 'exit':  # Agar foydalanuvchi 'exit' yozsa, dastur to'xtaydi
+            break
+        
+        asosiy_list.append(element)  # Kiritilgan elementni listga qo'shamiz
+    
+    print("\nYakuniy ro'yxat:")
+    print(asosiy_list)
 
-# Ishchilar ro'yxati
-odamlar = ["Ali", "Vali", "Olim", "Oygul", "Aziza"]
-
-# Natijalarni ko'rsatish
-natija = ishga_kelganmi(odamlar)
-print("\nIshga kelganlar ro'yxati:")
-for odam, status in natija.items():
-    print(f"{odam}: {status}")
+# Funktsiyani chaqiramiz
+list_yiguvchi()
