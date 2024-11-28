@@ -1,13 +1,11 @@
-import json
+# Qidiruv funksiyasi
+def search_in_json(data, keyword):
+    results = []
+    for key, value in data.items():
+        if keyword.lower() in str(value).lower():
+            results.append({key: value})
+    return results
 
-# JSON faylni yuklash
-with open('data.json', 'r') as file:
-    data = json.load(file)
-
-# JSON ma'lumotlarni o'qish
-print(data)
-
-# JSON ma'lumotlarni o'zgartirish va qayta yozish
-data['new_key'] = 'new_value'
-with open('data.json', 'w') as file:
-    json.dump(data, file, indent=4)
+# Qidiruvni sinash
+results = search_in_json(data, 'example')
+print(results)
