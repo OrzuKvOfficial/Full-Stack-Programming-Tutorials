@@ -1,11 +1,25 @@
-# Qidiruv funksiyasi
-def search_in_json(data, keyword):
-    results = []
-    for key, value in data.items():
-        if keyword.lower() in str(value).lower():
-            results.append({key: value})
-    return results
+from elasticsearch import Elasticsearch
 
-# Qidiruvni sinash
-results = search_in_json(data, 'example')
-print(results)
+# Elasticsearchga ulanish
+es = Elasticsearch()
+
+# JSON fayllarni Elasticsearchga yuklash
+def index_data(data):
+    for i, (key, value) in enumerate(data.items()):
+        es.index(index="documents", id=i, body={"key": key, "value": value})
+
+# Qidiruv qilish
+def search_es(query):
+    response = es.search(index="documents", body={
+        "query": {
+            "match": {
+                "value": query
+            }
+        }
+    })
+    for hit in response['hits']['hits']:
+        print(hit["_source"])
+
+# JSON fayllarni Elasticsearchga yuklash va qidirish
+index_data(data)
+search_es("example")
