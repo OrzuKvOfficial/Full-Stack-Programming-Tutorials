@@ -1,22 +1,36 @@
-import openai
+from flask import Flask
 
-# OpenAI API kalitingizni qo'shing
-openai.api_key = "YOUR_API_KEY"
+app = Flask(__name__)
 
-def ai_calculator(prompt):
-    try:
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=f"Hisoblashni bajaring: {prompt}",
-            max_tokens=50
-        )
-        return response.choices[0].text.strip()
-    except Exception as e:
-        return f"Xato: {e}"
+@app.route('/')
+def home():
+    return """
+    <html>
+        <head>
+            <title>Oddiy Sahifa</title>
+        </head>
+        <body>
+            <h1>Assalomu alaykum!</h1>
+            <p>Bu oddiy Flask yordamida yaratilgan veb-sahifa.</p>
+            <a href="/about">Men haqimda</a>
+        </body>
+    </html>
+    """
 
-print("AI Kalkulyator: Foydalanuvchi so'rovlarini tahlil qiladi va natijani qaytaradi.")
-while True:
-    user_input = input("Kirish (yoki 'chiqish' deb yozing): ")
-    if user_input.lower() == "chiqish":
-        break
-    print(ai_calculator(user_input))
+@app.route('/about')
+def about():
+    return """
+    <html>
+        <head>
+            <title>Men haqimda</title>
+        </head>
+        <body>
+            <h1>Men haqimda</h1>
+            <p>Bu sahifa Flask yordamida yaratildi va oddiy ma'lumotni o‘z ichiga oladi.</p>
+            <a href="/">Bosh sahifaga qaytish</a>
+        </body>
+    </html>
+    """
+
+if __name__ == '__main__':
+    app.run(debug=True)
