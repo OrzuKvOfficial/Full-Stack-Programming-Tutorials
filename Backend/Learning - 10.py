@@ -1,32 +1,16 @@
-from timezonefinder import TimezoneFinder
 from datetime import datetime
 import pytz
-from geopy.geocoders import Nominatim
 
-def get_country_time(country_name):
-    try:
-        # Geolokatsiya obyekti
-        geolocator = Nominatim(user_agent="geoapiExercises")
-        location = geolocator.geocode(country_name)
-        
-        if not location:
-            return f"{country_name} uchun joylashuv topilmadi."
-        
-        # Vaqt zonasi aniqlash
-        tf = TimezoneFinder()
-        timezone_str = tf.timezone_at(lng=location.longitude, lat=location.latitude)
-        
-        if not timezone_str:
-            return f"{country_name} uchun vaqt zonasi topilmadi."
-        
-        # Hozirgi vaqtni olish
-        timezone = pytz.timezone(timezone_str)
-        country_time = datetime.now(timezone)
-        
-        return f"{country_name} vaqti: {country_time.strftime('%Y-%m-%d %H:%M:%S')}"
-    except Exception as e:
-        return f"Xato yuz berdi: {e}"
+# Joylar va ularning vaqt zonalari
+locations = {
+    "New York": "America/New_York",
+    "London": "Europe/London",
+    "Tashkent": "Asia/Tashkent",
+    "Tokyo": "Asia/Tokyo"
+}
 
-# Foydalanuvchidan davlat nomini so'rash
-country = input("Davlat nomini kiriting: ")
-print(get_country_time(country))
+# Har bir joy uchun hozirgi vaqtni ko'rsatish
+for city, timezone in locations.items():
+    local_time = datetime.now(pytz.timezone(timezone))
+    print(f"{city}: {local_time.strftime('%Y-%m-%d %H:%M:%S')}")
+
