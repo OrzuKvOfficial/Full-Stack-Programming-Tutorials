@@ -1,36 +1,32 @@
-from flask import Flask
+from timezonefinder import TimezoneFinder
+from datetime import datetime
+import pytz
+from geopy.geocoders import Nominatim
 
-app = Flask(__name__)
+def get_country_time(country_name):
+    try:
+        # Geolokatsiya obyekti
+        geolocator = Nominatim(user_agent="geoapiExercises")
+        location = geolocator.geocode(country_name)
+        
+        if not location:
+            return f"{country_name} uchun joylashuv topilmadi."
+        
+        # Vaqt zonasi aniqlash
+        tf = TimezoneFinder()
+        timezone_str = tf.timezone_at(lng=location.longitude, lat=location.latitude)
+        
+        if not timezone_str:
+            return f"{country_name} uchun vaqt zonasi topilmadi."
+        
+        # Hozirgi vaqtni olish
+        timezone = pytz.timezone(timezone_str)
+        country_time = datetime.now(timezone)
+        
+        return f"{country_name} vaqti: {country_time.strftime('%Y-%m-%d %H:%M:%S')}"
+    except Exception as e:
+        return f"Xato yuz berdi: {e}"
 
-@app.route('/')
-def home():
-    return """
-    <html>
-        <head>
-            <title>Oddiy Sahifa</title>
-        </head>
-        <body>
-            <h1>Assalomu alaykum!</h1>
-            <p>Bu oddiy Flask yordamida yaratilgan veb-sahifa.</p>
-            <a href="/about">Men haqimda</a>
-        </body>
-    </html>
-    """
-
-@app.route('/about')
-def about():
-    return """
-    <html>
-        <head>
-            <title>Men haqimda</title>
-        </head>
-        <body>
-            <h1>Men haqimda</h1>
-            <p>Bu sahifa Flask yordamida yaratildi va oddiy ma'lumotni o‘z ichiga oladi.</p>
-            <a href="/">Bosh sahifaga qaytish</a>
-        </body>
-    </html>
-    """
-
-if __name__ == '__main__':
-    app.run(debug=True)
+# Foydalanuvchidan davlat nomini so'rash
+country = input("Davlat nomini kiriting: ")
+print(get_country_time(country))
